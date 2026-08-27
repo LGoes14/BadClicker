@@ -1,0 +1,2781 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAD CLICKER!</title>
+
+<meta name="theme-color" content="#000000">
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    overflow: hidden;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+/* ============================= */
+/* STARTSCHERM                   */
+/* ============================= */
+
+#startScreen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#startTitle {
+    margin: 0 0 12px;
+    font-size: 58px;
+    letter-spacing: 5px;
+}
+
+#startSubtitle {
+    color: #999;
+    margin-bottom: 25px;
+}
+
+#nameInput {
+    width: 320px;
+    max-width: 85%;
+    padding: 14px;
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    outline: none;
+    text-align: center;
+    font-size: 18px;
+}
+
+#startButton {
+    margin-top: 18px;
+    padding: 15px 55px;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#startButton:hover {
+    background: #ccc;
+}
+
+#startError {
+    height: 24px;
+    margin-top: 12px;
+}
+
+/* ============================= */
+/* GAME                          */
+/* ============================= */
+
+#game {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+}
+
+/* ============================= */
+/* BOVENKANT                     */
+/* ============================= */
+
+#statsLeft {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    line-height: 1.65;
+    font-size: 15px;
+}
+
+#statsRight {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    text-align: right;
+    line-height: 1.65;
+}
+
+#username {
+    font-weight: bold;
+}
+
+.muted {
+    color: #777;
+}
+
+/* ============================= */
+/* XP                            */
+/* ============================= */
+
+#xpContainer {
+    position: absolute;
+    top: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    max-width: 70%;
+    height: 10px;
+    border: 1px solid #555;
+}
+
+#xpBar {
+    width: 0%;
+    height: 100%;
+    background: #fff;
+    transition: width 0.2s;
+}
+
+/* ============================= */
+/* COMBO                         */
+/* ============================= */
+
+#comboContainer {
+    position: absolute;
+    top: 115px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 90%;
+}
+
+#comboText {
+    font-size: 20px;
+}
+
+#comboTimer {
+    width: 240px;
+    max-width: 70%;
+    height: 5px;
+    margin: 7px auto 0;
+    background: #222;
+}
+
+#comboTimerBar {
+    height: 100%;
+    width: 0%;
+    background: #fff;
+}
+
+/* ============================= */
+/* MELDING                       */
+/* ============================= */
+
+#message {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 92%;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+/* ============================= */
+/* KLIKKNOP                     */
+/* ============================= */
+
+#clickButton {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 21px 45px;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#clickButton:active {
+    transform: translate(-50%, -50%) scale(0.93);
+}
+
+#clickButton:disabled {
+    background: #333;
+    color: #777;
+    cursor: not-allowed;
+}
+
+/* ============================= */
+/* ONDERSTE TEKST                */
+/* ============================= */
+
+#bottomText {
+    position: absolute;
+    bottom: 62px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    color: #555;
+    text-align: center;
+}
+
+/* ============================= */
+/* MENUKNOPPEN                   */
+/* ============================= */
+
+.menuButton {
+    position: absolute;
+    bottom: 15px;
+    padding: 9px 13px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+
+.menuButton:hover {
+    background: #fff;
+    color: #000;
+}
+
+#shopButton {
+    left: 15px;
+}
+
+#achievementButton {
+    left: 115px;
+}
+
+#missionButton {
+    left: 235px;
+}
+
+#resetButton {
+    right: 15px;
+}
+
+/* ============================= */
+/* POPUPS                        */
+/* ============================= */
+
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.94);
+    justify-content: center;
+    align-items: center;
+}
+
+.popupContent {
+    width: 540px;
+    max-width: 92%;
+    max-height: 86%;
+    overflow-y: auto;
+    background: #000;
+    border: 2px solid #fff;
+    padding: 22px;
+}
+
+.popupTitle {
+    font-size: 30px;
+    margin-bottom: 18px;
+}
+
+.closeButton {
+    float: right;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 6px 11px;
+    cursor: pointer;
+}
+
+/* ============================= */
+/* WINKEL                        */
+/* ============================= */
+
+.shopItem {
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.shopItem h3 {
+    margin-top: 0;
+}
+
+.shopItem button {
+    padding: 8px 14px;
+    background: #fff;
+    color: #000;
+    border: none;
+    cursor: pointer;
+}
+
+.shopItem button:disabled {
+    background: #333;
+    color: #777;
+}
+
+.price {
+    margin: 8px 0;
+    color: #aaa;
+}
+
+/* ============================= */
+/* LIJSTEN                       */
+/* ============================= */
+
+.listItem {
+    border: 1px solid #444;
+    padding: 12px;
+    margin-bottom: 9px;
+}
+
+.unlocked {
+    border-color: #fff;
+}
+
+.locked {
+    opacity: 0.4;
+}
+
+/* ============================= */
+/* ANIMATIES                     */
+/* ============================= */
+
+.shake {
+    animation: shake 0.22s;
+}
+
+.big {
+    animation: big 0.35s;
+}
+
+.flash {
+    animation: flash 0.2s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(-50%, -50%);
+    }
+
+    25% {
+        transform: translate(-48%, -50%);
+    }
+
+    50% {
+        transform: translate(-52%, -50%);
+    }
+
+    75% {
+        transform: translate(-49%, -50%);
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes big {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ============================= */
+/* MOBIEL                       */
+/* ============================= */
+
+@media (max-width: 600px) {
+
+    #startTitle {
+        font-size: 39px;
+    }
+
+    #message {
+        font-size: 28px;
+    }
+
+    #clickButton {
+        font-size: 19px;
+        padding: 18px 29px;
+    }
+
+    #statsLeft,
+    #statsRight {
+        font-size: 12px;
+    }
+
+    #comboText {
+        font-size: 17px;
+    }
+
+    .menuButton {
+        font-size: 11px;
+        padding: 8px;
+    }
+
+    #achievementButton {
+        left: 95px;
+    }
+
+    #missionButton {
+        left: 195px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- STARTSCHERM -->
+
+<div id="startScreen">
+
+    <h1 id="startTitle">NIET KLIKKEN!</h1>
+
+    <div id="startSubtitle">
+        Je weet wat je moet doen...
+    </div>
+
+    <input
+        id="nameInput"
+        maxlength="20"
+        autocomplete="off"
+        placeholder="Gebruikersnaam"
+    >
+
+    <button id="startButton">
+        START
+    </button>
+
+    <div id="startError"></div>
+
+</div>
+
+
+<!-- GAME -->
+
+<div id="game">
+
+    <div id="statsLeft">
+
+        ⭐ Punten:
+        <span id="points">0</span>
+
+        <br>
+
+        🪙 Coins:
+        <span id="coins">0</span>
+
+        <br>
+
+        👆 Klikken:
+        <span id="clicks">0</span>
+
+        <br>
+
+        ❤️ Levens:
+        <span id="lives">3</span>
+
+    </div>
+
+
+    <div id="statsRight">
+
+        👤
+        <span id="username">
+            Speler
+        </span>
+
+        <br>
+
+        ⭐ Level:
+        <span id="level">
+            1
+        </span>
+
+    </div>
+
+
+    <div id="xpContainer">
+        <div id="xpBar"></div>
+    </div>
+
+
+    <div id="comboContainer">
+
+        <div id="comboText">
+            🔥 Combo:
+            <b id="combo">0</b>
+            / 50
+            —
+            <b id="multiplier">×1</b>
+        </div>
+
+        <div id="comboTimer">
+            <div id="comboTimerBar"></div>
+        </div>
+
+    </div>
+
+
+    <div id="message">
+        Hallo!
+    </div>
+
+
+    <button id="clickButton">
+        NIET KLIKKEN
+    </button>
+
+
+    <div id="bottomText">
+        Je bent gewaarschuwd...
+    </div>
+
+
+    <button class="menuButton" id="shopButton">
+        🛒 Winkel
+    </button>
+
+
+    <button class="menuButton" id="achievementButton">
+        🏆 Prestaties
+    </button>
+
+
+    <button class="menuButton" id="missionButton">
+        📋 Missies
+    </button>
+
+
+    <button class="menuButton" id="resetButton">
+        ♻️ Reset
+    </button>
+
+</div>
+
+
+<!-- WINKEL -->
+
+<div class="popup" id="shopPopup">
+
+    <div class="popupContent">
+
+        <button
+            class="closeButton"
+            onclick="closePopup('shopPopup')"
+        >
+            X
+        </button>
+
+        <div class="popupTitle">
+            🛒 Winkel
+        </div>
+
+        <p>
+            Je hebt
+            <b id="shopCoins">0</b>
+            coins.
+        </p>
+
+
+        <div class="shopItem">
+
+            <h3>⭐ Sterkere klik</h3>
+
+            <p>
+                Geeft meer punten per klik.
+            </p>
+
+            <p>
+                Gekocht:
+                <b id="pointsUpgradeOwned">0</b>×
+            </p>
+
+            <div class="price">
+                Prijs:
+                <b id="pointsUpgradePrice">100</b>
+                coins
+            </div>
+
+            <button
+                id="pointsUpgradeButton"
+                onclick="buyPointsUpgrade()"
+            >
+                KOPEN
+            </button>
+
+        </div>
+
+
+        <div class="shopItem">
+
+            <h3>🪙 Coin boost</h3>
+
+            <p>
+                Geeft meer coins per klik.
+            </p>
+
+            <p>
+                Gekocht:
+                <b id="coinUpgradeOwned">0</b>×
+            </p>
+
+            <div class="price">
+                Prijs:
+                <b id="coinUpgradePrice">150</b>
+                coins
+            </div>
+
+            <button
+                id="coinUpgradeButton"
+                onclick="buyCoinUpgrade()"
+            >
+                KOPEN
+            </button>
+
+        </div>
+
+
+        <div class="shopItem">
+
+            <h3>🔥 Combo-tijd</h3>
+
+            <p>
+                Je krijgt meer tijd om je combo vast te houden.
+            </p>
+
+            <p>
+                Gekocht:
+                <b id="comboUpgradeOwned">0</b>×
+            </p>
+
+            <div class="price">
+                Prijs:
+                <b id="comboUpgradePrice">250</b>
+                coins
+            </div>
+
+            <button
+                id="comboUpgradeButton"
+                onclick="buyComboUpgrade()"
+            >
+                KOPEN
+            </button>
+
+        </div>
+
+
+        <div class="shopItem">
+
+            <h3>❤️ Extra leven</h3>
+
+            <p>
+                Geeft je één extra leven.
+            </p>
+
+            <p>
+                Gekocht:
+                <b id="lifeUpgradeOwned">0</b>×
+            </p>
+
+            <div class="price">
+                Prijs:
+                <b id="lifeUpgradePrice">300</b>
+                coins
+            </div>
+
+            <button
+                id="lifeUpgradeButton"
+                onclick="buyLifeUpgrade()"
+            >
+                KOPEN
+            </button>
+
+        </div>
+
+
+        <div class="shopItem">
+
+            <h3>⚡ Kritieke klik</h3>
+
+            <p>
+                Kans op een enorme bonus per klik.
+            </p>
+
+            <p>
+                Gekocht:
+                <b id="criticalUpgradeOwned">0</b>×
+            </p>
+
+            <div class="price">
+                Prijs:
+                <b id="criticalUpgradePrice">500</b>
+                coins
+            </div>
+
+            <button
+                id="criticalUpgradeButton"
+                onclick="buyCriticalUpgrade()"
+            >
+                KOPEN
+            </button>
+
+        </div>
+
+
+        <div class="shopItem">
+
+            <h3>🎁 Bonuskans</h3>
+
+            <p>
+                Grotere kans op bonuspunten.
+            </p>
+
+            <p>
+                Gekocht:
+                <b id="bonusUpgradeOwned">0</b>×
+            </p>
+
+            <div class="price">
+                Prijs:
+                <b id="bonusUpgradePrice">750</b>
+                coins
+            </div>
+
+            <button
+                id="bonusUpgradeButton"
+                onclick="buyBonusUpgrade()"
+            >
+                KOPEN
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ACHIEVEMENTS -->
+
+<div class="popup" id="achievementPopup">
+
+    <div class="popupContent">
+
+        <button
+            class="closeButton"
+            onclick="closePopup('achievementPopup')"
+        >
+            X
+        </button>
+
+        <div class="popupTitle">
+            🏆 Prestaties
+        </div>
+
+        <div id="achievementList"></div>
+
+    </div>
+
+</div>
+
+
+<!-- MISSIES -->
+
+<div class="popup" id="missionPopup">
+
+    <div class="popupContent">
+
+        <button
+            class="closeButton"
+            onclick="closePopup('missionPopup')"
+        >
+            X
+        </button>
+
+        <div class="popupTitle">
+            📋 Missies
+        </div>
+
+        <div id="missionList"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ===================================================== */
+/* BASISDATA                                             */
+/* ===================================================== */
+
+let playerName = "";
+
+let points = 0;
+let coins = 0;
+let clicks = 0;
+
+let lives = 3;
+
+let level = 1;
+let xp = 0;
+
+let combo = 0;
+let comboTimeLeft = 0;
+
+let pointsUpgrade = 0;
+let coinUpgrade = 0;
+let comboUpgrade = 0;
+let lifeUpgrade = 0;
+let criticalUpgrade = 0;
+let bonusUpgrade = 0;
+
+let gameStarted = false;
+let gameOverState = false;
+
+let comboInterval = null;
+
+
+/* ===================================================== */
+/* HTML                                                  */
+/* ===================================================== */
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const game =
+    document.getElementById("game");
+
+const nameInput =
+    document.getElementById("nameInput");
+
+const startButton =
+    document.getElementById("startButton");
+
+const startError =
+    document.getElementById("startError");
+
+const username =
+    document.getElementById("username");
+
+const pointsElement =
+    document.getElementById("points");
+
+const coinsElement =
+    document.getElementById("coins");
+
+const clicksElement =
+    document.getElementById("clicks");
+
+const livesElement =
+    document.getElementById("lives");
+
+const levelElement =
+    document.getElementById("level");
+
+const xpBar =
+    document.getElementById("xpBar");
+
+const comboElement =
+    document.getElementById("combo");
+
+const multiplierElement =
+    document.getElementById("multiplier");
+
+const comboTimerBar =
+    document.getElementById("comboTimerBar");
+
+const message =
+    document.getElementById("message");
+
+const clickButton =
+    document.getElementById("clickButton");
+
+const bottomText =
+    document.getElementById("bottomText");
+
+
+/* ===================================================== */
+/* TEKSTEN                                               */
+/* ===================================================== */
+
+const messages = [
+    "Hallo!",
+    "Je hebt geklikt.",
+    "Niet klikken!",
+    "Je klikte toch.",
+    "Ik zei het!",
+    "Waarom klik je?",
+    "Daar ging je vinger weer.",
+    "Nog een klik?",
+    "Tuurlijk klik je.",
+    "De knop zag het.",
+    "De teller zag het.",
+    "Dat was snel.",
+    "Je bent goed bezig.",
+    "Of juist niet.",
+    "De knop is verbaasd.",
+    "De knop is trots.",
+    "De knop is bang.",
+    "De knop vertrouwt je.",
+    "De knop vertrouwt je niet.",
+    "Je kunt echt niet stoppen.",
+    "Nog eentje dan.",
+    "Oké, nog eentje.",
+    "Laatste klik!",
+    "Dat was niet de laatste.",
+    "Ik wist het.",
+    "Daar ben je weer.",
+    "Je score groeit.",
+    "Je combo groeit.",
+    "Blijf doorgaan.",
+    "Op naar de volgende mijlpaal.",
+    "Je bent een klikker.",
+    "Je bent een klikexpert.",
+    "Je bent een klikmeester.",
+    "Je bent een kliklegende.",
+    "Je bent een klikmachine.",
+    "Je bent niet te stoppen.",
+    "De teller kan je bijna niet bijhouden.",
+    "Dat was een krachtige klik.",
+    "Dat was een snelle klik.",
+    "Dat was een mooie klik.",
+    "Dat was een mysterieuze klik.",
+    "Dat was een verdachte klik.",
+    "Dat was een legendarische klik.",
+    "De knop heeft dit niet verwacht.",
+    "De knop wist dat je zou klikken.",
+    "Niemand kan jou stoppen.",
+    "Behalve jijzelf.",
+    "Maar jij stopt niet.",
+    "De miljoen wacht op je.",
+    "Elke klik telt."
+];
+
+// Voeg automatisch teksten toe tot er precies 1000 zijn.
+const extraMessages = [
+    "Blijf klikken!",
+    "Nog een!",
+    "Nog eentje!",
+    "Je gaat lekker!",
+    "Dat was weer een klik.",
+    "De teller loopt op.",
+    "Je bent nog steeds bezig.",
+    "Waarom zou je stoppen?",
+    "Klik!",
+    "Klik klik!",
+    "Klik klik klik!",
+    "De knop wacht op je.",
+    "Je hebt de knop gevonden.",
+    "De knop is er nog.",
+    "De score wordt groter.",
+    "Je bent dichterbij.",
+    "Bijna!",
+    "Nog even!",
+    "Goed gedaan!",
+    "Fantastisch!",
+    "Geweldig!",
+    "Ongelooflijk!",
+    "Wat een klik!",
+    "Dat zag er professioneel uit.",
+    "De knop is onder de indruk.",
+    "De teller is trots.",
+    "Je bent een kampioen.",
+    "Klikkampioen!",
+    "Nieuwe klik!",
+    "Nog een punt!",
+    "Nog een coin!",
+    "Je coins groeien.",
+    "De shop wordt blij.",
+    "De winkelier lacht.",
+    "De winkelier wil je coins.",
+    "Misschien moet je sparen.",
+    "Misschien moet je kopen.",
+    "Dat is jouw keuze.",
+    "De knop zegt hallo.",
+    "Hallo klikker.",
+    "Welkom terug.",
+    "Daar gaan we weer.",
+    "De volgende klik komt eraan.",
+    "Je kon het niet laten.",
+    "Ik wist dat je zou klikken.",
+    "Je bent voorspelbaar.",
+    "Maar wel goed.",
+    "Dat was grappig.",
+    "Dat was vreemd.",
+    "Dat was onverwacht.",
+    "Wat gebeurt hier?",
+    "Niemand weet het.",
+    "Zelfs de game niet.",
+    "De game blijft doorgaan.",
+    "Jij blijft doorgaan.",
+    "De teller blijft doorgaan.",
+    "Alles blijft doorgaan.",
+    "Klik voor klik.",
+    "Stap voor stap.",
+    "Punt voor punt.",
+    "Coin voor coin.",
+    "Mijlpaal voor mijlpaal.",
+    "Op naar de 100!",
+    "Op naar de 500!",
+    "Op naar de 1.000!",
+    "Op naar de 5.000!",
+    "Op naar de 10.000!",
+    "Op naar de 50.000!",
+    "Op naar de 100.000!",
+    "Op naar de 250.000!",
+    "Op naar de 500.000!",
+    "Op naar de 1 MILJOEN!",
+    "Je kunt het!",
+    "Geef niet op!",
+    "Blijf volhouden!",
+    "Je bent dichtbij!",
+    "De volgende mijlpaal wacht.",
+    "De teller kijkt mee.",
+    "De knop kijkt mee.",
+    "De shop kijkt mee.",
+    "Iedereen kijkt mee.",
+    "Dat was een speciale klik.",
+    "Misschien was dat een geheime klik.",
+    "Of misschien niet.",
+    "Dat blijft geheim.",
+    "Er zijn geen geheimen.",
+    "Of misschien wel.",
+    "Je zult het moeten ontdekken.",
+    "Blijf klikken om te ontdekken.",
+    "Nog één klik.",
+    "Oké, nog twee.",
+    "Oké, nog drie.",
+    "Nu echt de laatste.",
+    "Nee hoor.",
+    "Daar kwam er alweer één.",
+    "Je bent snel.",
+    "Je bent heel snel.",
+    "Je bent extreem snel.",
+    "Je vinger vliegt.",
+    "Je vingers vliegen.",
+    "De knop kan het bijna niet aan.",
+    "Rustig aan!",
+    "Of niet.",
+    "Ga maar door.",
+    "De knop vindt het leuk.",
+    "De knop vindt het spannend.",
+    "De knop is klaar.",
+    "Ben jij klaar?",
+    "Daar gaan we!",
+    "Klik!",
+    "KLIK!",
+    "KLIKKKK!",
+    "SUPERKLIK!",
+    "MEGAKLIK!",
+    "ULTRAKLIK!",
+    "GIGAKLIK!",
+    "EPISCHE KLIK!",
+    "LEGENDARISCHE KLIK!",
+    "MYTHISCHE KLIK!",
+    "KOSMISCHE KLIK!",
+    "Dat was enorm.",
+    "Dat was gigantisch.",
+    "Dat was geweldig.",
+    "Je hebt talent.",
+    "Een heel bijzonder talent.",
+    "Klikken is jouw specialiteit.",
+    "Je bent ervoor gemaakt.",
+    "De knop is jouw beste vriend.",
+    "De teller is jouw beste vriend.",
+    "De coins zijn jouw beste vrienden.",
+    "De shop is jouw tweede huis.",
+    "Welkom thuis.",
+    "De knop zegt niets.",
+    "Dat is verdacht.",
+    "Heel verdacht.",
+    "EXTREEM VERDACHT.",
+    "Agent Klik is onderweg.",
+    "Agent Klik onderzoekt je score.",
+    "De score is verdacht hoog.",
+    "Onderzoek afgerond.",
+    "Je bent schuldig aan klikken.",
+    "De straf is nog een klik.",
+    "Je bent veroordeeld.",
+    "De rechter is een knop.",
+    "De jury bestaat uit drie tellers.",
+    "De uitspraak is duidelijk.",
+    "KLIK!",
+    "Zaak gesloten.",
+    "Zaak opnieuw geopend.",
+    "Je hebt weer geklikt.",
+    "Typisch.",
+    "Dat zag ik aankomen.",
+    "De game zag het aankomen.",
+    "De knop zag het aankomen.",
+    "De teller zag het aankomen.",
+    "Iedereen wist het.",
+    "Behalve misschien jij.",
+    "Of jij wist het ook.",
+    "Je bent slim.",
+    "Heel slim.",
+    "Klikslim.",
+    "Dat is geen officieel woord.",
+    "Maar nu wel.",
+    "Je hebt een nieuw woord geleerd.",
+    "Gefeliciteerd!",
+    "Je hebt een denkbeeldige prijs gewonnen.",
+    "De prijs is een klik.",
+    "Je hebt hem verdiend.",
+    "Goed gedaan, klikker.",
+    "Welkom bij Team Klik.",
+    "Team Klik is sterk.",
+    "Team Klik geeft niet op.",
+    "Team Klik klikt.",
+    "Team Klik wint.",
+    "Je bent nummer één.",
+    "Er is geen nummer twee.",
+    "Dat maakt het makkelijk.",
+    "Kampioen!",
+    "Je bent een kampioen.",
+    "De beker staat klaar.",
+    "De medaille ligt klaar.",
+    "De trofee wacht.",
+    "Je hebt hem bijna.",
+    "Nog even!",
+    "Nog een paar klikken.",
+    "Blijf doorgaan.",
+    "Je komt steeds verder.",
+    "De score blijft stijgen.",
+    "De coins blijven komen.",
+    "De combo blijft lopen.",
+    "Pas op voor je combo.",
+    "Hou je combo vast.",
+    "50 combo is maximaal.",
+    "De maximale combo!",
+    "Je hebt de combo gehaald!",
+    "Combo meester!",
+    "Combo koning!",
+    "Combo legende!",
+    "Dat was een mooie combo.",
+    "De combo is sterk.",
+    "De combo is terug.",
+    "De combo kijkt naar je.",
+    "De combo zegt: meer!",
+    "De teller zegt: rustig!",
+    "De knop zegt: meer!",
+    "De shop zegt: coins!",
+    "Iedereen praat tegelijk.",
+    "Wat een chaos.",
+    "Klikchaos!",
+    "Pure klikchaos!",
+    "De chaos groeit.",
+    "De chaos is compleet.",
+    "Je hebt chaos veroorzaakt.",
+    "Nieuwe titel: Chaosklikker.",
+    "Dat klinkt goed.",
+    "Je verdient die titel.",
+    "De titel is van jou.",
+    "Nog een klik voor de titel.",
+    "Je hebt hem!",
+    "Gefeliciteerd!",
+    "Goed gedaan!",
+    "Super!",
+    "Fantastisch!",
+    "Geweldig!",
+    "Ongelofelijk!",
+    "Wat een score!",
+    "Wat een tempo!",
+    "Wat een snelheid!",
+    "Wat een klik!",
+    "Dat was perfect.",
+    "Perfecte timing.",
+    "Precies goed.",
+    "Op het juiste moment.",
+    "Je timing is geweldig.",
+    "Je bent een professional.",
+    "Professionele klikker.",
+    "Senior klikker.",
+    "Klikmanager.",
+    "Klikdirecteur.",
+    "Klikbaas.",
+    "Klikkoning.",
+    "Klikkeizer.",
+    "De ultieme klikker.",
+    "De baas van de knop.",
+    "De baas van de teller.",
+    "De baas van de shop.",
+    "De baas van alles.",
+    "Oké, misschien niet alles.",
+    "Maar wel van deze knop.",
+    "Deze knop is van jou.",
+    "De knop hoort bij jou.",
+    "Jij hoort bij de knop.",
+    "Een perfecte combinatie.",
+    "Een klikteam.",
+    "Een klikduo.",
+    "Een klikfamilie.",
+    "De klikfamilie groeit.",
+    "Welkom in de familie.",
+    "De familie zegt hallo.",
+    "Hallo!",
+    "Daar ben je weer!",
+    "Ik herkende je.",
+    "De game herkende je.",
+    "De knop herkende je.",
+    "De teller herkende je.",
+    "Je naam staat bovenaan.",
+    "Iedereen weet wie je bent.",
+    "Je bent beroemd.",
+    "Beroemd in Klikland.",
+    "Klikland heeft je nodig.",
+    "De stad heeft je nodig.",
+    "De knop heeft je nodig.",
+    "De teller heeft je nodig.",
+    "Red Klikland!",
+    "Klik!",
+    "Je hebt Klikland gered.",
+    "De wereld is gered.",
+    "De knop is gered.",
+    "De teller is gered.",
+    "De shop is gered.",
+    "Iedereen is blij.",
+    "Wat een held.",
+    "Je bent een held.",
+    "Een digitale held.",
+    "Een klikheld.",
+    "Superklikheld!",
+    "De cape staat je goed.",
+    "De cape is denkbeeldig.",
+    "Maar hij ziet er cool uit.",
+    "De knop vindt hem mooi.",
+    "De teller ook.",
+    "Nog één klik voor de show.",
+    "De show begint.",
+    "Licht uit.",
+    "Spotlight aan.",
+    "De knop staat klaar.",
+    "Jij staat klaar.",
+    "De teller staat klaar.",
+    "Klik!",
+    "Het publiek juicht.",
+    "👏",
+    "🎉",
+    "🏆",
+    "Je hebt applaus verdiend.",
+    "Nog een applaus.",
+    "👏👏",
+    "Het publiek gaat los.",
+    "Wat een optreden.",
+    "Wat een klikshow.",
+    "De beste klikshow ooit.",
+    "Misschien.",
+    "Waarschijnlijk.",
+    "Hopelijk.",
+    "Maar het is jouw show.",
+    "Jij bepaalt.",
+    "Klik wanneer jij wilt.",
+    "De knop wacht.",
+    "De knop wacht nog steeds.",
+    "De knop heeft geduld.",
+    "De knop heeft heel veel geduld.",
+    "Jij blijkbaar ook.",
+    "Of niet.",
+    "Je hebt alweer geklikt.",
+    "Daar is hij.",
+    "Nog een punt.",
+    "Nog een coin.",
+    "Nog een stap.",
+    "Nog een mijlpaal.",
+    "Nog een tekst.",
+    "Nog een verrassing.",
+    "Nog een klik.",
+    "Altijd nog een klik.",
+    "Dat is het geheim.",
+    "Het geheim is klikken.",
+    "Geen geheim meer.",
+    "Oeps.",
+    "Je weet het nu.",
+    "Bewaar het geheim.",
+    "Niet vertellen.",
+    "Of vertel het iedereen.",
+    "De keuze is aan jou.",
+    "Je hebt weer geklikt.",
+    "Ik wist het.",
+    "Natuurlijk wist ik het.",
+    "Je bent voorspelbaar.",
+    "Maar toch leuk.",
+    "Blijf zo doorgaan.",
+    "Op naar de volgende!",
+    "De volgende klik wacht.",
+    "Klik erop!",
+    "Of niet.",
+    "De knop zegt NIET KLIKKEN.",
+    "Je weet wat je moet doen.",
+    "Je klikt toch.",
+    "Dat was duidelijk.",
+    "De knop had ongelijk.",
+    "Of jij had gelijk.",
+    "Wie weet?",
+    "Niemand weet het.",
+    "Maar je hebt geklikt.",
+    "Dat is zeker.",
+    "De teller liegt niet.",
+    "De teller zegt de waarheid.",
+    "Je score is echt.",
+    "Je coins zijn echt.",
+    "Je combo is echt.",
+    "Deze klik was echt.",
+    "Deze tekst is echt.",
+    "Alles is echt.",
+    "Behalve de denkbeeldige medaille.",
+    "Die is nog steeds denkbeeldig.",
+    "Maar wel mooi.",
+    "Je hebt weer een klik.",
+    "Je hebt weer een punt.",
+    "Je hebt weer een reden om door te gaan.",
+    "Dus ga door.",
+    "Klik!",
+    "Klik!",
+    "Klik!",
+    "Op naar de miljoen!"
+];
+
+// Vul automatisch aan tot precies 1000 berichten.
+let i = 0;
+
+while (messages.length < 1000) {
+    messages.push(
+        extraMessages[i % extraMessages.length] + " #" + (messages.length + 1)
+    );
+    i++;
+  }
+
+
+/* ===================================================== */
+/* MIJLPALEN                                             */
+/* ===================================================== */
+
+const specialMessages = {
+
+    1: "EERSTE KLIK! Je hebt het toch gedaan.",
+    2: "TWEE KLIKKEN! Je bent begonnen.",
+    3: "DRIE KLIKKEN! Dit gaat snel.",
+    5: "5 KLIKKEN! Je kon het niet laten.",
+    10: "10 KLIKKEN! Waarom doe je dit?",
+    15: "15 KLIKKEN! Nog steeds bezig.",
+    20: "20 KLIKKEN! Je geeft niet op.",
+    25: "25 KLIKKEN! Een kwart van 100.",
+    50: "50 KLIKKEN! De knop begint bang te worden.",
+    75: "75 KLIKKEN! Bijna 100.",
+    99: "99 KLIKKEN! NOG ÉÉN!",
+    100: "100 KLIKKEN! Eerste grote mijlpaal!",
+    101: "101 KLIKKEN! Je had kunnen stoppen.",
+    125: "125 KLIKKEN! Je gaat gewoon door.",
+    150: "150 KLIKKEN! Respect.",
+    200: "200 KLIKKEN! Dit wordt serieus.",
+    250: "250 KLIKKEN! Een kwart van 1000.",
+    300: "300 KLIKKEN! Nog steeds niet gestopt.",
+    400: "400 KLIKKEN! De knop heeft spijt.",
+    500: "500 KLIKKEN! DE HELFT VAN 1000!",
+    600: "600 KLIKKEN! Dit is niet normaal.",
+    666: "666 KLIKKEN... Oei.",
+    750: "750 KLIKKEN! Nog 250.",
+    900: "900 KLIKKEN! BIJNA 1000!",
+    999: "999 KLIKKEN! NOG ÉÉN!",
+    1000: "1000 KLIKKEN! JE BENT EEN KLIKLEGENDE!",
+    1250: "1250! Nu begint het echte werk.",
+    1500: "1500! Je bent niet te stoppen.",
+    2000: "2000 KLIKKEN! WAAROM?!",
+    2500: "2500! Een kwart van 10K.",
+    3000: "3000! De knop wordt zenuwachtig.",
+    4000: "4000! Je blijft maar gaan.",
+    5000: "5000! VIJFDUIZEND!",
+    7500: "7500! Nog 2500 tot 10K.",
+    9999: "9999! NOG ÉÉN TOT 10K!",
+    10000: "10.000 KLIKKEN! TIENDUIZEND!",
+    15000: "15.000! Dit is geen normale hobby meer.",
+    20000: "20.000! Je bent serieus.",
+    25000: "25.000! Een kwart van 100K.",
+    50000: "50.000! VIJFTIGDUIZEND!",
+    75000: "75.000! Nog 25K.",
+    99999: "99.999! NOG ÉÉN TOT 100K!",
+    100000: "100.000 KLIKKEN! JE BENT GEK.",
+    125000: "125K! Gewoon doorgaan.",
+    150000: "150K! De knop heeft opgegeven.",
+    200000: "200K! TWEEHONDERDDUIZEND!",
+    250000: "250K! Een kwart miljoen!",
+    300000: "300K! Dit kan toch niet?",
+    400000: "400K! Nog 100K.",
+    500000: "500.000! DE HELFT VAN EEN MILJOEN!",
+    600000: "600K! Je bent niet normaal.",
+    666666: "666.666... 😳",
+    700000: "700K! Nog 300K.",
+    750000: "750K! BIJNA!",
+    800000: "800K! De miljoen komt dichterbij.",
+    850000: "850K! Je bent bijna daar.",
+    900000: "900K! NOG 100.000!",
+    950000: "950K! BIJNA EEN MILJOEN!",
+    990000: "990K! NOG 10.000!",
+    999000: "999K! NOG 1000!",
+    999900: "999.900! NOG 100!",
+    999990: "999.990! NOG 10!",
+    999999: "999.999! NOG ÉÉN KLIK!!!",
+    1000000: "🎉 1.000.000 KLIKKEN!!! JE HEBT HET GEDAAN!!!"
+
+};
+
+
+/* ===================================================== */
+/* ACHIEVEMENTS                                          */
+/* ===================================================== */
+
+const achievements = [
+
+    ["first", "Eerste klik", "Klik één keer.", 1],
+    ["ten", "Tien!", "Bereik 10 klikken.", 10],
+    ["hundred", "Honderd", "Bereik 100 klikken.", 100],
+    ["thousand", "Duizend", "Bereik 1000 klikken.", 1000],
+    ["tenk", "10K", "Bereik 10.000 klikken.", 10000],
+    ["hundredk", "100K", "Bereik 100.000 klikken.", 100000],
+    ["million", "MILJOEN", "Bereik 1.000.000 klikken.", 1000000],
+    ["combo50", "MAX COMBO", "Bereik combo 50.", 50],
+    ["rich", "Rijk", "Verzamel 1000 coins.", 1000]
+
+];
+
+
+/* ===================================================== */
+/* MISSIES                                               */
+/* ===================================================== */
+
+const missions = [
+
+    {
+        name: "Beginner",
+        description: "Klik 25 keer.",
+        type: "clicks",
+        goal: 25,
+        reward: 50
+    },
+
+    {
+        name: "Doorzetter",
+        description: "Klik 100 keer.",
+        type: "clicks",
+        goal: 100,
+        reward: 100
+    },
+
+    {
+        name: "Klikmachine",
+        description: "Klik 1000 keer.",
+        type: "clicks",
+        goal: 1000,
+        reward: 500
+    },
+
+    {
+        name: "Miljonair",
+        description: "Verzamel 10.000 coins.",
+        type: "coins",
+        goal: 10000,
+        reward: 2500
+    },
+
+    {
+        name: "Combo-koning",
+        description: "Bereik combo 50.",
+        type: "combo",
+        goal: 50,
+        reward: 250
+    }
+
+];
+
+
+/* ===================================================== */
+/* HULPFUNCTIES                                          */
+/* ===================================================== */
+
+function randomMessage() {
+
+    return messages[
+        Math.floor(Math.random() * messages.length)
+    ];
+
+}
+
+
+function getMultiplier() {
+
+    if (combo >= 50) {
+        return 2;
+    }
+
+    return 1;
+
+}
+
+
+/* ===================================================== */
+/* SHOP PRIJZEN                                          */
+/* ===================================================== */
+
+function pricePoints() {
+
+    return Math.floor(
+        100 * Math.pow(1.55, pointsUpgrade)
+    );
+
+}
+
+
+function priceCoins() {
+
+    return Math.floor(
+        150 * Math.pow(1.6, coinUpgrade)
+    );
+
+}
+
+
+function priceCombo() {
+
+    return Math.floor(
+        250 * Math.pow(1.65, comboUpgrade)
+    );
+
+}
+
+
+function priceLife() {
+
+    return Math.floor(
+        300 * Math.pow(1.7, lifeUpgrade)
+    );
+
+}
+
+
+function priceCritical() {
+
+    return Math.floor(
+        500 * Math.pow(1.75, criticalUpgrade)
+    );
+
+}
+
+
+function priceBonus() {
+
+    return Math.floor(
+        750 * Math.pow(1.8, bonusUpgrade)
+    );
+
+}
+
+
+/* ===================================================== */
+/* STARTEN                                               */
+/* ===================================================== */
+
+function startGame() {
+
+    const enteredName =
+        nameInput.value.trim();
+
+    if (!enteredName) {
+
+        startError.textContent =
+            "Vul eerst je gebruikersnaam in!";
+
+        nameInput.focus();
+
+        return;
+
+    }
+
+    playerName = enteredName;
+
+    loadGame();
+
+    username.textContent =
+        playerName;
+
+    startScreen.style.display =
+        "none";
+
+    game.style.display =
+        "block";
+
+    gameStarted = true;
+    gameOverState = false;
+
+    clickButton.disabled = false;
+    clickButton.textContent = "NIET KLIKKEN";
+
+    message.textContent =
+        "Hallo, " + playerName + "!";
+
+    bottomText.textContent =
+        "Je bent gewaarschuwd...";
+
+    startComboTimer();
+
+    updateUI();
+
+}
+
+
+/* ===================================================== */
+/* KLIKKEN                                               */
+/* ===================================================== */
+
+function clickGame() {
+
+    if (!gameStarted || gameOverState) {
+        return;
+    }
+
+    clicks++;
+
+    combo++;
+
+    if (combo > 50) {
+        combo = 50;
+    }
+
+    comboTimeLeft =
+        getComboDuration();
+
+
+    let multiplier =
+        getMultiplier();
+
+
+    let earnedPoints =
+        1 + pointsUpgrade;
+
+    earnedPoints *= multiplier;
+
+    points += earnedPoints;
+
+
+    let earnedCoins =
+        1 + coinUpgrade;
+
+    coins += earnedCoins;
+
+
+    xp += 8 + Math.min(pointsUpgrade, 5);
+
+    checkLevel();
+
+
+    /* KRITIEKE KLIK */
+
+    const criticalChance =
+        0.01 +
+        criticalUpgrade * 0.01;
+
+    if (Math.random() < criticalChance) {
+
+        const criticalBonus =
+            Math.max(
+                10,
+                earnedPoints * 10
+            );
+
+        points += criticalBonus;
+
+        message.textContent =
+            "⚡ KRITIEKE KLIK! +" +
+            criticalBonus +
+            " punten!";
+
+    }
+
+    /* GEWONE BONUS */
+
+    else {
+
+        const bonusChance =
+            0.025 +
+            bonusUpgrade * 0.01;
+
+        if (Math.random() < bonusChance) {
+
+            const bonus =
+                Math.floor(
+                    Math.random() * 20
+                ) + 10;
+
+            points += bonus;
+
+            message.textContent =
+                "🎁 BONUS! +" +
+                bonus +
+                " punten!";
+
+        }
+
+        /* MIJLPAAL */
+
+        else if (specialMessages[clicks]) {
+
+            message.textContent =
+                specialMessages[clicks];
+
+        }
+
+        /* GEEN APARTE COMBO-50 TEKST */
+
+        else {
+
+            message.textContent =
+                randomMessage();
+
+        }
+
+    }
+
+
+    if (Math.random() < 0.006) {
+
+        lives--;
+
+        if (lives <= 0) {
+
+            lives = 0;
+
+            gameOver();
+
+            return;
+
+        }
+
+        bottomText.textContent =
+            "⚠️ Oei! Je verloor een leven.";
+
+    }
+
+
+    message.classList.remove("shake");
+    clickButton.classList.remove("flash");
+
+    void message.offsetWidth;
+
+    message.classList.add("shake");
+    clickButton.classList.add("flash");
+
+
+    checkAchievements();
+    checkMissions();
+
+    updateUI();
+    saveGame();
+
+}
+
+
+/* ===================================================== */
+/* COMBO TIJD                                            */
+/* ===================================================== */
+
+function getComboDuration() {
+
+    return 2200 +
+        comboUpgrade * 500;
+
+}
+
+
+function startComboTimer() {
+
+    clearInterval(comboInterval);
+
+    comboInterval =
+        setInterval(function() {
+
+            if (!gameStarted || gameOverState) {
+                return;
+            }
+
+            if (combo > 0) {
+
+                comboTimeLeft -= 100;
+
+                if (comboTimeLeft <= 0) {
+
+                    combo = 0;
+
+                    comboTimeLeft = 0;
+
+                    bottomText.textContent =
+                        "🔥 Combo kwijt! Bouw hem opnieuw op.";
+
+                }
+
+                updateUI();
+
+            }
+
+        }, 100);
+
+}
+
+
+/* ===================================================== */
+/* LEVELS                                                */
+/* ===================================================== */
+
+function checkLevel() {
+
+    const needed =
+        100 + (level - 1) * 50;
+
+    if (xp >= needed) {
+
+        xp -= needed;
+
+        level++;
+
+        coins += 25;
+
+        message.textContent =
+            "⭐ LEVEL UP! Je bent level " +
+            level +
+            "!";
+
+        bottomText.textContent =
+            "Level omhoog! +25 coins.";
+
+    }
+
+}
+
+
+/* ===================================================== */
+/* SHOP                                                */
+/* ===================================================== */
+
+function buyPointsUpgrade() {
+
+    const price =
+        pricePoints();
+
+    if (coins < price) {
+
+        message.textContent =
+            "Je hebt niet genoeg coins.";
+
+        return;
+
+    }
+
+    coins -= price;
+    pointsUpgrade++;
+
+    message.textContent =
+        "⭐ Sterkere klik gekocht!";
+
+    updateUI();
+    saveGame();
+
+}
+
+
+function buyCoinUpgrade() {
+
+    const price =
+        priceCoins();
+
+    if (coins < price) {
+
+        message.textContent =
+            "Je hebt niet genoeg coins.";
+
+        return;
+
+    }
+
+    coins -= price;
+    coinUpgrade++;
+
+    message.textContent =
+        "🪙 Coin boost gekocht!";
+
+    updateUI();
+    saveGame();
+
+}
+
+
+function buyComboUpgrade() {
+
+    const price =
+        priceCombo();
+
+    if (coins < price) {
+
+        message.textContent =
+            "Je hebt niet genoeg coins.";
+
+        return;
+
+    }
+
+    coins -= price;
+    comboUpgrade++;
+
+    message.textContent =
+        "🔥 Combo-tijd verbeterd!";
+
+    updateUI();
+    saveGame();
+
+}
+
+
+function buyLifeUpgrade() {
+
+    const price =
+        priceLife();
+
+    if (coins < price) {
+
+        message.textContent =
+            "Je hebt niet genoeg coins.";
+
+        return;
+
+    }
+
+    coins -= price;
+
+    lives++;
+    lifeUpgrade++;
+
+    message.textContent =
+        "❤️ Extra leven gekocht!";
+
+    updateUI();
+    saveGame();
+
+}
+
+
+function buyCriticalUpgrade() {
+
+    const price =
+        priceCritical();
+
+    if (coins < price) {
+
+        message.textContent =
+            "Je hebt niet genoeg coins.";
+
+        return;
+
+    }
+
+    coins -= price;
+    criticalUpgrade++;
+
+    message.textContent =
+        "⚡ Kritieke klik verbeterd!";
+
+    updateUI();
+    saveGame();
+
+}
+
+
+function buyBonusUpgrade() {
+
+    const price =
+        priceBonus();
+
+    if (coins < price) {
+
+        message.textContent =
+            "Je hebt niet genoeg coins.";
+
+        return;
+
+    }
+
+    coins -= price;
+    bonusUpgrade++;
+
+    message.textContent =
+        "🎁 Bonuskans verbeterd!";
+
+    updateUI();
+    saveGame();
+
+}
+
+
+/* ===================================================== */
+/* UPDATE UI                                             */
+/* ===================================================== */
+
+function updateUI() {
+
+    pointsElement.textContent =
+        formatNumber(points);
+
+    coinsElement.textContent =
+        formatNumber(coins);
+
+    clicksElement.textContent =
+        formatNumber(clicks);
+
+    livesElement.textContent =
+        lives;
+
+    levelElement.textContent =
+        level;
+
+    comboElement.textContent =
+        combo;
+
+    multiplierElement.textContent =
+        "×" + getMultiplier();
+
+
+    const needed =
+        100 + (level - 1) * 50;
+
+    const percentage =
+        Math.min(
+            100,
+            (xp / needed) * 100
+        );
+
+    xpBar.style.width =
+        percentage + "%";
+
+
+    const duration =
+        getComboDuration();
+
+    let comboPercentage =
+        comboTimeLeft / duration;
+
+    comboPercentage =
+        Math.max(
+            0,
+            Math.min(1, comboPercentage)
+        );
+
+    comboTimerBar.style.width =
+        (comboPercentage * 100) + "%";
+
+
+    updateShop();
+    updateMissionDisplay();
+
+}
+
+
+function formatNumber(number) {
+
+    return Number(number).toLocaleString("nl-NL");
+
+}
+
+
+/* ===================================================== */
+/* SHOP UI                                               */
+/* ===================================================== */
+
+function updateShop() {
+
+    document.getElementById(
+        "shopCoins"
+    ).textContent =
+        formatNumber(coins);
+
+
+    document.getElementById(
+        "pointsUpgradeOwned"
+    ).textContent =
+        pointsUpgrade;
+
+    document.getElementById(
+        "pointsUpgradePrice"
+    ).textContent =
+        formatNumber(pricePoints());
+
+
+    document.getElementById(
+        "coinUpgradeOwned"
+    ).textContent =
+        coinUpgrade;
+
+    document.getElementById(
+        "coinUpgradePrice"
+    ).textContent =
+        formatNumber(priceCoins());
+
+
+    document.getElementById(
+        "comboUpgradeOwned"
+    ).textContent =
+        comboUpgrade;
+
+    document.getElementById(
+        "comboUpgradePrice"
+    ).textContent =
+        formatNumber(priceCombo());
+
+
+    document.getElementById(
+        "lifeUpgradeOwned"
+    ).textContent =
+        lifeUpgrade;
+
+    document.getElementById(
+        "lifeUpgradePrice"
+    ).textContent =
+        formatNumber(priceLife());
+
+
+    document.getElementById(
+        "criticalUpgradeOwned"
+    ).textContent =
+        criticalUpgrade;
+
+    document.getElementById(
+        "criticalUpgradePrice"
+    ).textContent =
+        formatNumber(priceCritical());
+
+
+    document.getElementById(
+        "bonusUpgradeOwned"
+    ).textContent =
+        bonusUpgrade;
+
+    document.getElementById(
+        "bonusUpgradePrice"
+    ).textContent =
+        formatNumber(priceBonus());
+
+
+    document.getElementById(
+        "pointsUpgradeButton"
+    ).disabled =
+        coins < pricePoints();
+
+
+    document.getElementById(
+        "coinUpgradeButton"
+    ).disabled =
+        coins < priceCoins();
+
+
+    document.getElementById(
+        "comboUpgradeButton"
+    ).disabled =
+        coins < priceCombo();
+
+
+    document.getElementById(
+        "lifeUpgradeButton"
+    ).disabled =
+        coins < priceLife();
+
+
+    document.getElementById(
+        "criticalUpgradeButton"
+    ).disabled =
+        coins < priceCritical();
+
+
+    document.getElementById(
+        "bonusUpgradeButton"
+    ).disabled =
+        coins < priceBonus();
+
+}
+
+
+/* ===================================================== */
+/* ACHIEVEMENTS                                          */
+/* ===================================================== */
+
+function checkAchievements() {
+
+    achievements.forEach(function(a) {
+
+        const id =
+            "achievement_" + a[0];
+
+        let unlocked = false;
+
+
+        if (a[0] === "combo50") {
+
+            unlocked =
+                combo >= 50;
+
+        }
+        else if (a[0] === "rich") {
+
+            unlocked =
+                coins >= a[3];
+
+        }
+        else {
+
+            unlocked =
+                clicks >= a[3];
+
+        }
+
+
+        if (
+            unlocked &&
+            !localStorage.getItem(id)
+        ) {
+
+            localStorage.setItem(
+                id,
+                "true"
+            );
+
+            coins += 50;
+
+            message.textContent =
+                "🏆 PRESTATIE ONTGRENDELD! " +
+                a[1];
+
+        }
+
+    });
+
+}
+
+
+function showAchievements() {
+
+    const list =
+        document.getElementById(
+            "achievementList"
+        );
+
+    list.innerHTML = "";
+
+
+    achievements.forEach(function(a) {
+
+        const unlocked =
+            localStorage.getItem(
+                "achievement_" + a[0]
+            );
+
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "listItem " +
+            (
+                unlocked
+                    ? "unlocked"
+                    : "locked"
+            );
+
+
+        div.innerHTML =
+            "<b>" +
+            (
+                unlocked
+                    ? "🏆 "
+                    : "🔒 "
+            ) +
+            a[1] +
+            "</b>" +
+            "<br>" +
+            a[2];
+
+
+        list.appendChild(div);
+
+    });
+
+
+    document.getElementById(
+        "achievementPopup"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* ===================================================== */
+/* MISSIES                                               */
+/* ===================================================== */
+
+function getMissionValue(mission) {
+
+    if (mission.type === "clicks") {
+        return clicks;
+    }
+
+    if (mission.type === "coins") {
+        return coins;
+    }
+
+    if (mission.type === "combo") {
+        return combo;
+    }
+
+    return 0;
+
+}
+
+
+function checkMissions() {
+
+    missions.forEach(function(mission, index) {
+
+        const value =
+            getMissionValue(mission);
+
+        const id =
+            "mission_" + index;
+
+
+        if (
+            value >= mission.goal &&
+            !localStorage.getItem(id)
+        ) {
+
+            localStorage.setItem(
+                id,
+                "true"
+            );
+
+            coins += mission.reward;
+
+            message.textContent =
+                "📋 MISSIE VOLTOOID! +" +
+                mission.reward +
+                " coins!";
+
+        }
+
+    });
+
+}
+
+
+function updateMissionDisplay() {
+
+    const list =
+        document.getElementById(
+            "missionList"
+        );
+
+    list.innerHTML = "";
+
+
+    missions.forEach(function(mission, index) {
+
+        const value =
+            getMissionValue(mission);
+
+        const completed =
+            localStorage.getItem(
+                "mission_" + index
+            );
+
+
+        const progress =
+            Math.min(
+                value,
+                mission.goal
+            );
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "listItem";
+
+
+        div.innerHTML =
+            "<b>" +
+            (
+                completed
+                    ? "✅ "
+                    : "📋 "
+            ) +
+            mission.name +
+            "</b>" +
+            "<br>" +
+            mission.description +
+            "<br><br>" +
+            "Voortgang: " +
+            formatNumber(progress) +
+            " / " +
+            formatNumber(mission.goal) +
+            "<br>" +
+            "Beloning: " +
+            formatNumber(mission.reward) +
+            " coins";
+
+
+        list.appendChild(div);
+
+    });
+
+}
+
+
+function showMissions() {
+
+    updateMissionDisplay();
+
+    document.getElementById(
+        "missionPopup"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* ===================================================== */
+/* POPUPS                                                */
+/* ===================================================== */
+
+function closePopup(id) {
+
+    document.getElementById(id)
+        .style.display =
+        "none";
+
+}
+
+
+document.getElementById(
+    "shopButton"
+).addEventListener(
+    "click",
+    function() {
+
+        updateShop();
+
+        document.getElementById(
+            "shopPopup"
+        ).style.display =
+            "flex";
+
+    }
+);
+
+
+document.getElementById(
+    "achievementButton"
+).addEventListener(
+    "click",
+    showAchievements
+);
+
+
+document.getElementById(
+    "missionButton"
+).addEventListener(
+    "click",
+    showMissions
+);
+
+
+/* ===================================================== */
+/* GAME OVER                                             */
+/* ===================================================== */
+
+function gameOver() {
+
+    gameOverState = true;
+
+    clearInterval(comboInterval);
+
+    clickButton.disabled = true;
+
+    clickButton.textContent =
+        "GAME OVER";
+
+    message.textContent =
+        "💀 GAME OVER";
+
+    bottomText.textContent =
+        "Je hebt geen levens meer. Reset de game om opnieuw te beginnen.";
+
+    saveGame();
+
+}
+
+
+/* ===================================================== */
+/* OPSLAAN                                               */
+/* ===================================================== */
+
+function saveGame() {
+
+    if (!playerName) {
+        return;
+    }
+
+
+    const data = {
+
+        playerName: playerName,
+
+        points: points,
+        coins: coins,
+        clicks: clicks,
+
+        lives: lives,
+
+        level: level,
+        xp: xp,
+
+        pointsUpgrade: pointsUpgrade,
+        coinUpgrade: coinUpgrade,
+        comboUpgrade: comboUpgrade,
+        lifeUpgrade: lifeUpgrade,
+        criticalUpgrade: criticalUpgrade,
+        bonusUpgrade: bonusUpgrade
+
+    };
+
+
+    localStorage.setItem(
+        "nietKlikkenSave",
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* ===================================================== */
+/* LADEN                                                 */
+/* ===================================================== */
+
+function loadGame() {
+
+    const saved =
+        localStorage.getItem(
+            "nietKlikkenSave"
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+
+        if (
+            data.playerName &&
+            data.playerName === playerName
+        ) {
+
+            points =
+                data.points || 0;
+
+            coins =
+                data.coins || 0;
+
+            clicks =
+                data.clicks || 0;
+
+            lives =
+                data.lives ?? 3;
+
+            level =
+                data.level || 1;
+
+            xp =
+                data.xp || 0;
+
+            pointsUpgrade =
+                data.pointsUpgrade || 0;
+
+            coinUpgrade =
+                data.coinUpgrade || 0;
+
+            comboUpgrade =
+                data.comboUpgrade || 0;
+
+            lifeUpgrade =
+                data.lifeUpgrade || 0;
+
+            criticalUpgrade =
+                data.criticalUpgrade || 0;
+
+            bonusUpgrade =
+                data.bonusUpgrade || 0;
+
+        }
+
+    }
+    catch(error) {
+
+        console.log(
+            "Opslaan kon niet worden geladen."
+        );
+
+    }
+
+}
+
+
+/* ===================================================== */
+/* RESET                                                 */
+/* ===================================================== */
+
+document.getElementById(
+    "resetButton"
+).addEventListener(
+    "click",
+    function() {
+
+        const answer =
+            confirm(
+                "Weet je zeker dat je ALLES wilt verwijderen?"
+            );
+
+        if (!answer) {
+            return;
+        }
+
+
+        localStorage.removeItem(
+            "nietKlikkenSave"
+        );
+
+
+        achievements.forEach(function(a) {
+
+            localStorage.removeItem(
+                "achievement_" + a[0]
+            );
+
+        });
+
+
+        missions.forEach(function(m, index) {
+
+            localStorage.removeItem(
+                "mission_" + index
+            );
+
+        });
+
+
+        location.reload();
+
+    }
+);
+
+
+/* ===================================================== */
+/* START                                                 */
+/* ===================================================== */
+
+startButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+nameInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            startGame();
+
+        }
+
+    }
+);
+
+
+clickButton.addEventListener(
+    "click",
+    clickGame
+);
+
+
+/* ===================================================== */
+/* INIT                                                  */
+/* ===================================================== */
+
+message.textContent = "Hallo!";
+
+</script>
+
+
+</body>
+</html>
